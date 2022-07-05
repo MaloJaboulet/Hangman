@@ -29,7 +29,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  provider: ^6.0.3
+  shake: ^2.1.0
+  sensors_plus: ^1.3.2
+  http: ^0.13.4
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -51,6 +54,18 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
+  assets:
+    - assets/images/hangman0.png
+    - assets/images/hangman1.png
+    - assets/images/hangman2.png
+    - assets/images/hangman3.png
+    - assets/images/hangman4.png
+    - assets/images/hangman5.png
+    - assets/images/hangman6.png
+    - assets/images/hangman7.png
+    - assets/images/hangman8.png
+    - assets/images/hangman9.png
+    - assets/images/hangman10.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
