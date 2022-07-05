@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hangman/model/listOfWords.dart';
+import 'package:hangman/model/fetchWords.dart';
 import 'package:hangman/model/words.dart';
 import 'package:provider/provider.dart';
 
@@ -89,10 +89,10 @@ class _ListPageState extends State<ListPage> {
     var words = Provider.of<Words>(context);
     return Center(
       child: ListView.builder(
-        itemCount: words.wordsList.length,
+        itemCount: words.getWordList.length,
         itemBuilder: (context, index) {
           return Card(
-            child: ListTile(title: Text(words.wordsList.elementAt(index))),
+            child: ListTile(title: Text(words.getWordList.elementAt(index))),
           );
         },
         //Text(snapshot.data!.words.first);

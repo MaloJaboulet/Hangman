@@ -1,16 +1,22 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
-import 'package:hangman/model/listOfWords.dart';
 import 'package:hangman/model/words.dart';
 import 'package:hangman/pages/listPage.dart';
 import 'package:shake/shake.dart';
 
 class Homepage extends StatefulWidget {
+  Words data;
+
+  Homepage(this.data);
+
   @override
   _HomepageState createState() => _HomepageState();
+
 }
 
 class _HomepageState extends State<Homepage> {
-  late Future<Words> wordList;
+  late String word = "";
 
   //state vars
   forceRedraw() {
@@ -20,19 +26,17 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     super.initState();
-    wordList = ListOfWords().fetchWords();
+    word = widget.data.getWord;
 
     ShakeDetector.autoStart(
       onPhoneShake: () {
-        forceRedraw();
+
       },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    /*var cookies = Provider.of<Cookies>(context);
-    String wisdom = cookies.cookieOfTheDay;*/
 
     return Scaffold(
       appBar: AppBar(

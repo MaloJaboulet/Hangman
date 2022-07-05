@@ -13,7 +13,7 @@ class ListOfWords{
       // then parse the JSON.
       Words wordList = Words.fromJson(json.decode(utf8.decode(response.bodyBytes)));
 
-      for(var word in wordList.wordsList){
+      for(var word in wordList.getWordList){
           if (word.contains("ß")){
             word = word.replaceAll("ß", "ss");
           }
