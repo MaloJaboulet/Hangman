@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hangman/model/listOfWords.dart';
 import 'package:hangman/model/words.dart';
+import 'package:hangman/pages/listPage.dart';
 import 'package:shake/shake.dart';
 
 class Homepage extends StatefulWidget {
@@ -57,7 +58,7 @@ class _HomepageState extends State<Homepage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return Container();
+                      return ListPage();
                     },
                   ),
                 );
@@ -67,34 +68,7 @@ class _HomepageState extends State<Homepage> {
       body: Column(
         children: [
           Image.asset('assets/images/hangman1.png'),
-          Expanded(child: lineWord(context)),
         ],
-      ),
-    );
-  }
-
-  Widget lineWord(BuildContext context) {
-    return Center(
-      child: FutureBuilder<Words>(
-        future: wordList,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-              itemCount: snapshot.data!.words.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  child: ListTile(
-                      title: Text(snapshot.data!.words.elementAt(index))),
-                );
-              },
-              //Text(snapshot.data!.words.first);
-            );
-          } else if (snapshot.hasError) {
-            return Text('${snapshot.error}');
-          }
-
-          return const CircularProgressIndicator();
-        },
       ),
     );
   }

@@ -2,17 +2,22 @@ import 'package:flutter/material.dart';
 
 
 class Words extends ChangeNotifier {
-  late List<String> words;
+  late List<String> wordsList;
 
-  Words({required this.words});
+  Words({required this.wordsList});
 
   Words.fromJson(Map<String, dynamic> json) {
-    words = json['words'].cast<String>();
+    wordsList = json['words'].cast<String>();
+  }
+
+  add(String word){
+    wordsList.add(word);
+    notifyListeners();
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['words'] = this.words;
+    data['words'] = this.wordsList;
     return data;
   }
 }

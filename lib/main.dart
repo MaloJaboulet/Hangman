@@ -1,24 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:hangman/model/listOfWords.dart';
+import 'package:hangman/model/words.dart';
 import 'package:hangman/pages/homepage.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  Words words = Words(wordsList: loadList());
+  runApp(MyApp(words));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final Words data;
+
+  const MyApp(this.data, {Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Homepage',
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-
+    return ChangeNotifierProvider<Words>(
+      create: (_) => data,
+      child: MaterialApp(
+        title: 'Homepage',
+        darkTheme: ThemeData(
+          brightness: Brightness.dark,
+        ),
+        themeMode: ThemeMode.dark,
+        home: Homepage(),
       ),
-      themeMode: ThemeMode.dark,
-      home: Homepage(),
     );
   }
 }
@@ -106,4 +114,13 @@ class _MyHomePageState extends State<MyHomePage> {
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+}
+List<String> loadList(){
+  List<String> list = [];
+  List<Words> listOfWords = [];
+  ListOfWords().fetchWords().then((value) {
+    list.addAll(value.wordsList);
+  });
+
+  return list;
 }
