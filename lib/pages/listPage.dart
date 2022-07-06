@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:hangman/controller/wordController.dart';
 import 'package:hangman/model/fetchWords.dart';
 import 'package:hangman/model/words.dart';
 import 'package:provider/provider.dart';
 
 class ListPage extends StatefulWidget {
+  WordController wordController;
+  ListPage(this.wordController);
+
   @override
   _ListPageState createState() => _ListPageState();
 }
 
 class _ListPageState extends State<ListPage> {
-  late Future<Words> wordList;
+
   final myTextController = TextEditingController();
 
   //state vars
@@ -17,82 +21,29 @@ class _ListPageState extends State<ListPage> {
   @override
   void initState() {
     super.initState();
-    wordList = ListOfWords().fetchWords();
   }
 
   @override
   Widget build(BuildContext context) {
-    /*var cookies = Provider.of<Cookies>(context);
-    String wisdom = cookies.cookieOfTheDay;*/
 
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.home),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return Container();
-                },
-              ),
-            );
-          },
-        ),
         title: const Center(child: Text("List")),
-        actions: [
-          IconButton(
-              icon: Icon(Icons.view_headline_sharp),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return Container();
-                    },
-                  ),
-                );
-              }),
-        ],
       ),
       body: Column(
-        children: [Expanded(child: listWords(context)), listForm(context)],
+        children: [Expanded(child: listWords(widget.wordController)), listForm(widget.wordController)],
       ),
     );
   }
 
-  Widget listWords(BuildContext context) {
-    /*return Center(
-      child: FutureBuilder<Words>(
-        future: wordList,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return ListView.builder(
-              itemCount: snapshot.data!.wordsList.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  child: ListTile(
-                      title: Text(snapshot.data!.wordsList.elementAt(index))),
-                );
-              },
-              //Text(snapshot.data!.words.first);
-            );
-          } else if (snapshot.hasError) {
-            return Text('${snapshot.error}');
-          }
-
-          return const CircularProgressIndicator();
-        },
-      ),
-    );*/
-    var words = Provider.of<Words>(context);
+  Widget listWords(WordController controller) {
+    //var controller = Provider.of<WordController>(context);
     return Center(
       child: ListView.builder(
-        itemCount: words.getWordList.length,
+        itemCount: controller.getWords.getWordList.length,
         itemBuilder: (context, index) {
           return Card(
-            child: ListTile(title: Text(words.getWordList.elementAt(index))),
+            child: ListTile(title: Text(controller.getWords.getWordList.elementAt(index))),
           );
         },
         //Text(snapshot.data!.words.first);
@@ -100,8 +51,7 @@ class _ListPageState extends State<ListPage> {
     );
   }
 
-  Widget listForm(BuildContext context) {
-    var wordlist = Provider.of<Words>(context);
+  Widget listForm(WordController controller) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -117,7 +67,7 @@ class _ListPageState extends State<ListPage> {
         ElevatedButton(
             onPressed: () {
               if (myTextController.text.isNotEmpty) {
-                wordlist.add(myTextController.text);
+                controller.add(myTextController.text);
                 myTextController.clear();
               }
             },

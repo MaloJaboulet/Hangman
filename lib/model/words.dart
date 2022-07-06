@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 
 class Words extends ChangeNotifier {
-  late List<String> _wordsList = [];
+  late List<String> _wordsList = ["Haus"];
 
   Words({required List<String> wordList}){
      this._wordsList = wordList;
@@ -14,15 +14,16 @@ class Words extends ChangeNotifier {
     _wordsList = json['words'].cast<String>();
   }
 
-  add(String word){
-    _wordsList.add(word);
-    notifyListeners();
+
+
+  List<String> get getWordList => _wordsList;
+
+  String get getWord {
+    if (_wordsList.isNotEmpty) {
+       return _wordsList.elementAt(Random().nextInt(_wordsList.length));
+    }
+    return "";
   }
-
-  List<String> get getWordList => List.unmodifiable(_wordsList);
-
-  String get getWord =>
-      _wordsList.elementAt(Random().nextInt(_wordsList.length));
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();

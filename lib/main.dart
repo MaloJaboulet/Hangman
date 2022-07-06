@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hangman/controller/wordController.dart';
 import 'package:hangman/model/fetchWords.dart';
 import 'package:hangman/model/words.dart';
 import 'package:hangman/pages/homepage.dart';
@@ -7,26 +8,27 @@ import 'package:provider/provider.dart';
 void main() async {
   var list = await loadList();
   Words words = Words(wordList: list);
-  runApp(MyApp(words));
+  WordController wordController = WordController.name(words);
+  runApp(MyApp(wordController));
 }
 
 class MyApp extends StatelessWidget {
-  final Words data;
+  final WordController controller;
 
-  const MyApp(this.data, {Key? key}) : super(key: key);
+  const MyApp(this.controller, {Key? key}) : super(key: key);
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<Words>(
-      create: (_) => data,
+    return ChangeNotifierProvider<WordController>(
+      create: (_) => controller,
       child: MaterialApp(
         title: 'Homepage',
         darkTheme: ThemeData(
           brightness: Brightness.dark,
         ),
         themeMode: ThemeMode.dark,
-        home: Homepage(data),
+        home: Homepage(controller),
       ),
     );
   }

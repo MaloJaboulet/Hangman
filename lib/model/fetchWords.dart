@@ -17,6 +17,7 @@ class ListOfWords{
           if (word.contains("ß")){
             word = word.replaceAll("ß", "ss");
           }
+
         }
       return wordList;
     } else {
