@@ -22,7 +22,7 @@ class Words extends ChangeNotifier {
     if (_wordsList.isNotEmpty) {
        return _wordsList.elementAt(Random().nextInt(_wordsList.length));
     }
-    return "";
+    return "Empty";
   }
 
   Map<String, dynamic> toJson() {

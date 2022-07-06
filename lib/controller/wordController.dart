@@ -27,8 +27,8 @@ class WordController extends ChangeNotifier{
   }
 
   bool phoneShaked(){
-    if (blankSpaces == 0){
-      _word = _words.getWord;
+    if (!blankSpaces){
+      restartWord();
       return true;
     }else{
       return false;
@@ -41,31 +41,45 @@ class WordController extends ChangeNotifier{
   }
 
   guessLetter(String letter){
-    if (_word.contains(letter)){
-      List<int> indexList = [];
-      List<String> temp = _word.split("");
+    if (_word=="Empty"){
+      setWord();
+    }else {
+      if (_word.contains(letter)) {
+        List<int> indexList = [];
+        List<String> temp = _word.split("");
 
-      for (var i=0; i<temp.length; i++){
-        if(temp.elementAt(i) == letter){
-          indexList.add(i);
+        for (var i = 0; i < temp.length; i++) {
+          if (temp.elementAt(i) == letter) {
+            indexList.add(i);
+          }
+        }
+        for (var index in indexList) {
+          _lettersGuessed.removeAt(index);
+          _lettersGuessed.insert(index, letter);
         }
       }
-      for (var index in indexList){
-        _lettersGuessed.removeAt(index);
-        _lettersGuessed.insert(index, letter);
+      print(_word);
+      print(_lettersGuessed);
+      if (!_lettersGuessed.contains("")) {
+        _blankSpaces = false;
       }
+      notifyListeners();
+    }
+  }
+
+  restartWord(){
+    _lettersGuessed.clear();
+    _word = "";
+    _word = _words.getWord.toUpperCase();
+    _blankSpaces = true;
+    for (var i = 0; i < _word.length; i++) {
+      _lettersGuessed.add("");
     }
     notifyListeners();
-    print(_lettersGuessed);
-    if (!_lettersGuessed.contains("")){
-      _blankSpaces = false;
-    }
   }
 
 
   List<String> splitWord(){
-    //_lettersGuessed = getWord.toUpperCase().trim().split("");
-    print(_lettersGuessed);
     return _lettersGuessed;
   }
 
@@ -99,9 +113,9 @@ class WordController extends ChangeNotifier{
   }
 
    setWord(){
-    _word = _words.getWord.toUpperCase();
     _lettersGuessed.clear();
     if (_words.getWordList.isNotEmpty) {
+      _word = _words.getWord.toUpperCase();
       for (var i = 0; i < _word.length; i++) {
         _lettersGuessed.add("");
       }
@@ -110,7 +124,7 @@ class WordController extends ChangeNotifier{
         _lettersGuessed.add("");
       }
     }
+
     _blankSpaces = true;
-    print(_word);
   }
 }
