@@ -5,11 +5,10 @@ import 'package:hangman/pages/homepage.dart';
 
 class StartPage extends StatefulWidget {
   late WordController _wordController;
-  late Players _players;
 
-  StartPage(WordController controller, Players players) {
+
+  StartPage(WordController controller) {
     _wordController = controller;
-    _players = players;
   }
 
   StartPage.name(this._wordController);
@@ -63,7 +62,7 @@ class _StartPageState extends State<StartPage> {
               onPressed: () {
                 if (myTextController.text.isNotEmpty) {
                   String playerName = myTextController.text;
-                  widget._players.addPlayer(playerName, 0);
+                  Players.addPlayer(playerName, 0);
                   myTextController.clear();
                   Navigator.push(
                     context,
@@ -71,27 +70,13 @@ class _StartPageState extends State<StartPage> {
                       builder: (context) {
                         return Homepage(
                             widget._wordController,
-                            widget._players.getPlayer(playerName),
-                            widget._players);
+                            Players.getPlayer(playerName),);
                       },
                     ),
                   );
                 }
               },
               child: Text("Start")),
-          Expanded(
-            child: ListView.builder(
-              itemCount: widget._players.getList.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  child: ListTile(
-                      title:
-                          Text(widget._players.getList.elementAt(index).name)),
-                );
-              },
-              //Text(snapshot.data!.words.first);
-            ),
-          ),
         ],
       ),
     );

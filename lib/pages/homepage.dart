@@ -10,13 +10,11 @@ import 'package:shake/shake.dart';
 class Homepage extends StatefulWidget {
   late WordController wordController;
   late Player player;
-  late Players players;
 
 
-  Homepage(WordController wordController, Player player, Players players) {
+  Homepage(WordController wordController, Player player) {
     this.wordController = wordController;
     this.player = player;
-    this.players = players;
     wordController.setWord();
   }
 
@@ -56,7 +54,7 @@ class _HomepageState extends State<Homepage> {
               context,
               MaterialPageRoute(
                 builder: (context) {
-                  return StartPage(widget.wordController, widget.players);
+                  return StartPage(widget.wordController);
                 },
               ),
             );

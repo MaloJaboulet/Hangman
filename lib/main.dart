@@ -13,16 +13,18 @@ void main() async {
   Words words = Words(wordList: list);
   WordController wordController = WordController.name(words);
 
+  WidgetsFlutterBinding.ensureInitialized();
+
   List<Player> playersList = [];
-  Players players = Players(playersList);
-  runApp(MyApp(wordController, players));
+  //Players players = Players();
+  await Players.init();
+  runApp(MyApp(wordController));
 }
 
 class MyApp extends StatelessWidget {
   final WordController controller;
-  final Players players;
 
-  MyApp(this.controller, this.players, {Key? key}) : super(key: key);
+  MyApp(this.controller, {Key? key}) : super(key: key);
 
 
   // This widget is the root of your application.
@@ -38,7 +40,7 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.dark,
         ),
         themeMode: ThemeMode.dark,
-        home: StartPage(controller, players),
+        home: StartPage(controller),
       ),
     );
   }
