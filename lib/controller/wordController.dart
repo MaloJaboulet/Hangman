@@ -1,49 +1,53 @@
 import 'package:flutter/cupertino.dart';
 import 'package:hangman/model/words.dart';
+import 'package:vibration/vibration.dart';
 
-class WordController extends ChangeNotifier{
+class WordController extends ChangeNotifier {
   String _word = "";
   bool _wordGuessed = true;
   bool _blankSpaces = true;
   late Words _words;
   late List<String> _lettersGuessed = [];
+  int _guessesDone = 0;
+  bool _allowedVibration = false;
 
-  WordController(String word, bool wordGuessed, Words words){
+  WordController(String word, bool wordGuessed, Words words) {
     _wordGuessed = wordGuessed;
     _words = words;
     _word = _words.getWord.toUpperCase();
-    for (var i=0;i<_word.length; i++){
+    for (var i = 0; i < _word.length; i++) {
       _lettersGuessed.add("");
     }
+    setAllowedVibration();
   }
 
-
-  WordController.name(Words words){
+  WordController.name(Words words) {
     _words = words;
     _word = _words.getWord;
-    for (var i=0;i<7; i++){
+    for (var i = 0; i < 7; i++) {
       _lettersGuessed.add("");
     }
+    setAllowedVibration();
   }
 
-  bool phoneShaked(){
-    if (!blankSpaces){
+  bool phoneShaked() {
+    if (!blankSpaces) {
       restartWord();
       return true;
-    }else{
+    } else {
       return false;
     }
   }
 
-  add(String word){
+  add(String word) {
     _words.getWordList.add(word);
     notifyListeners();
   }
 
-  guessLetter(String letter){
-    if (_word=="Empty"){
+  guessLetter(String letter) {
+    if (_word == "Empty") {
       setWord();
-    }else {
+    } else {
       if (_word.contains(letter)) {
         List<int> indexList = [];
         List<String> temp = _word.split("");
@@ -57,7 +61,13 @@ class WordController extends ChangeNotifier{
           _lettersGuessed.removeAt(index);
           _lettersGuessed.insert(index, letter);
         }
+      } else {
+        addGuessesLeft();
+        print(allowedVibration);
+
+        Vibration.vibrate(duration: 100,amplitude: 255);
       }
+
       print(_word);
       print(_lettersGuessed);
       if (!_lettersGuessed.contains("")) {
@@ -67,7 +77,7 @@ class WordController extends ChangeNotifier{
     }
   }
 
-  restartWord(){
+  restartWord() {
     _lettersGuessed.clear();
     _word = "";
     _word = _words.getWord.toUpperCase();
@@ -75,20 +85,48 @@ class WordController extends ChangeNotifier{
     for (var i = 0; i < _word.length; i++) {
       _lettersGuessed.add("");
     }
+    _guessesDone = 0;
     notifyListeners();
   }
 
+  setWord() {
+    _lettersGuessed.clear();
+    if (_words.getWordList.isNotEmpty) {
+      _word = _words.getWord.toUpperCase();
+      for (var i = 0; i < _word.length; i++) {
+        _lettersGuessed.add("");
+      }
+    } else {
+      for (var i = 0; i < 7; i++) {
+        _lettersGuessed.add("");
+      }
+    }
 
-  List<String> splitWord(){
+    _blankSpaces = true;
+  }
+
+  revealWord() {
+    _lettersGuessed = _word.split("");
+    _blankSpaces = false;
+    notifyListeners();
+  }
+
+  addGuessesLeft() {
+    if (_guessesDone < 10) {
+      _guessesDone = _guessesDone + 1;
+      if (_guessesDone == 10) {
+        revealWord();
+      }
+    }
+  }
+
+  List<String> splitWord() {
     return _lettersGuessed;
   }
 
-  String get getWord =>
-      _words.getWord;
-
+  String get getWord => _words.getWord;
 
   bool get blankSpaces => _blankSpaces;
-
 
   set blankSpaces(bool value) {
     _blankSpaces = value;
@@ -112,19 +150,35 @@ class WordController extends ChangeNotifier{
     _word = value;
   }
 
-   setWord(){
-    _lettersGuessed.clear();
-    if (_words.getWordList.isNotEmpty) {
-      _word = _words.getWord.toUpperCase();
-      for (var i = 0; i < _word.length; i++) {
-        _lettersGuessed.add("");
-      }
-    }else{
-      for (var i = 0; i < 7; i++) {
-        _lettersGuessed.add("");
-      }
-    }
+  List<String> get lettersGuessed => _lettersGuessed;
 
-    _blankSpaces = true;
+  set lettersGuessed(List<String> value) {
+    _lettersGuessed = value;
+  }
+
+  int get getGuessesLeft => _guessesDone;
+
+  set guessesLeft(int value) {
+    _guessesDone = value;
+  }
+
+  String getImagePath() {
+    return 'assets/images/hangman${getGuessesLeft}.png';
+  }
+
+  int get guessesDone => _guessesDone;
+
+  set guessesDone(int value) {
+    _guessesDone = value;
+  }
+
+  bool get allowedVibration => _allowedVibration;
+
+  set allowedVibration(bool value) {
+    _allowedVibration = value;
+  }
+
+  setAllowedVibration() async {
+    //_allowedVibration = await Vibrate.canVibrate;
   }
 }

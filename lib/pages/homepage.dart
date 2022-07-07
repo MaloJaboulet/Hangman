@@ -74,9 +74,9 @@ class _HomepageState extends State<Homepage> {
           children: [
             Container(
               height: (MediaQuery.of(context).size.height / 2) - 50,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 image: DecorationImage(
-                    image: AssetImage('assets/images/hangman10.png'),
+                    image: AssetImage(widget.wordController.getImagePath()),
                     fit: BoxFit.fill),
               ),
             ),
