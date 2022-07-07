@@ -1,30 +1,34 @@
 import 'package:flutter/cupertino.dart';
 
-class Player extends ChangeNotifier{
+class Player extends ChangeNotifier {
+  String name = "";
+  int highScore = 0;
 
-  String _name = "";
-  int _highScore = 0;
+  Player(String name, int highScore) {
+    this.name = name;
+    this.highScore;
+  }
 
-  Player(this._name, this._highScore);
+  /*Player({
+    required this.name,
+    required this.highScore,
+  });*/
 
-  Player.name(this._name);
+  Player.second(this.name);
 
-  increaseHighScore(int highScore){
-    if (_highScore <highScore){
-      _highScore = highScore;
+  increaseHighScore(int highScore) {
+    if (this.highScore < highScore) {
+      this.highScore = highScore;
       notifyListeners();
     }
   }
 
-  int get highScore => _highScore;
+  Map toJson() => {
+        'name': name,
+        'highScore': highScore,
+      };
 
-  set highScore(int value) {
-    _highScore = value;
-  }
-
-  String get name => _name;
-
-  set name(String value) {
-    _name = value;
+  factory Player.fromJson(dynamic json) {
+    return Player(json['name'] as String, json['highScore'] as int);
   }
 }

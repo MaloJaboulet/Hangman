@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hangman/controller/wordController.dart';
 import 'package:hangman/model/player.dart';
-import 'package:hangman/model/players.dart';
+import 'package:hangman/controller/players.dart';
 import 'package:hangman/pages/listPage.dart';
 import 'package:hangman/pages/startPage.dart';
 import 'package:provider/provider.dart';

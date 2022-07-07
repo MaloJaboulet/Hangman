@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hangman/controller/wordController.dart';
-import 'package:hangman/model/players.dart';
+import 'package:hangman/controller/players.dart';
 import 'package:hangman/pages/homepage.dart';
 
 class StartPage extends StatefulWidget {
@@ -23,7 +23,6 @@ class _StartPageState extends State<StartPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget._players.getList.length);
     return Scaffold(
       appBar: AppBar(
         title: Center(
@@ -80,6 +79,19 @@ class _StartPageState extends State<StartPage> {
                 }
               },
               child: Text("Start")),
+          Expanded(
+            child: ListView.builder(
+              itemCount: widget._players.getList.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  child: ListTile(
+                      title:
+                          Text(widget._players.getList.elementAt(index).name)),
+                );
+              },
+              //Text(snapshot.data!.words.first);
+            ),
+          ),
         ],
       ),
     );
