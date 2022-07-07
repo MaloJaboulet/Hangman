@@ -1,7 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:hangman/controller/wordController.dart';
 import 'package:hangman/model/player.dart';
-import 'package:hangman/controller/players.dart';
 import 'package:hangman/pages/listPage.dart';
 import 'package:hangman/pages/startPage.dart';
 import 'package:provider/provider.dart';
@@ -10,6 +11,7 @@ import 'package:shake/shake.dart';
 class Homepage extends StatefulWidget {
   late WordController wordController;
   late Player player;
+
 
 
   Homepage(WordController wordController, Player player) {
@@ -24,6 +26,8 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   //state vars
+  Timer? timer;
+  Duration _duration = Duration(minutes: 1);
   forceRedraw() {
     setState(() => {});
   }
@@ -31,6 +35,18 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     super.initState();
+    startTimer;
+
+
+    /*if (timer == null || timer!.isActive){
+      stopTimer();
+    }*/
+    String strDigits(int n) => n.toString().padLeft(2, '0');
+    while(timer!.isActive) {
+      print(strDigits(_duration.inSeconds));
+    }
+
+
 
     ShakeDetector.autoStart(
       onPhoneShake: () {
@@ -223,5 +239,31 @@ class _HomepageState extends State<Homepage> {
     }
 
     return list;
+  }
+
+  void startTimer() {
+   timer =
+    Timer.periodic(Duration(seconds: 1), (_) => setCountDown());
+  }
+
+  void stopTimer() {
+    setState(() => timer!.cancel());
+  }
+
+  void resetTimer() {
+    stopTimer();
+    setState(() => _duration = Duration(days: 5));
+  }
+
+  void setCountDown() {
+    final reduceSecondsBy = 1;
+    setState(() {
+      final seconds = _duration.inSeconds - reduceSecondsBy;
+      if (seconds < 0) {
+        timer!.cancel();
+      } else {
+        _duration = Duration(seconds: seconds);
+      }
+    });
   }
 }

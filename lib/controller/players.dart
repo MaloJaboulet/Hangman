@@ -4,7 +4,6 @@ import 'package:hangman/model/player.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Players {
-  //List<Player> _playersList;
   static SharedPreferences? _preferences;
 
   static Future init() async =>
@@ -15,15 +14,25 @@ class Players {
       print("++++++++++++++++++++++++++++++++++++++++++");
       Player player = Player(name, highscore);
       List<Player> tempList = getPlayerList();
-      tempList.add(player);
-      //_playersList.add(player);
-      _preferences!.setString(
-          "players", jsonEncode(tempList.map((e) => e.toJson()).toList()));
+      if (!Players.containsPlayer(name)) {
+        tempList.add(player);
+        _preferences!.setString(
+            "players", jsonEncode(tempList.map((e) => e.toJson()).toList()));
+      }
     }
-    //notifyListeners();
   }
 
-  //List<Player> get getList => List.unmodifiable(_playersList);
+  static bool containsPlayer(String name){
+    if (_preferences != null) {
+      var playersList = getPlayerList();
+      for (var player in playersList) {
+        if (player.name == name) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 
   static Player getPlayer(String name) {
     if (_preferences != null) {
@@ -43,10 +52,23 @@ class Players {
         Iterable l = json.decode(_preferences!.get("players")
             .toString());
         List<Player> list =
-        List<Player>.from(l.map((model) => Player.fromJson(model)));
+          List<Player>.from(l.map((model) => Player.fromJson(model)));
+        list.sort(sortComparison);
         return list;
       }
     }
     return [];
+  }
+
+  static int sortComparison(Player p1, Player p2) {
+    final highScorePlayer1 = p1.highScore;
+    final highScorePlayer2 = p2.highScore;
+    if (highScorePlayer1 < highScorePlayer2) {
+      return -1;
+    } else if (highScorePlayer1 > highScorePlayer2) {
+      return 1;
+    } else {
+      return 0;
+    }
   }
 }

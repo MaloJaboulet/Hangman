@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hangman/controller/wordController.dart';
 import 'package:hangman/controller/players.dart';
+import 'package:hangman/pages/highscore.dart';
 import 'package:hangman/pages/homepage.dart';
 
 class StartPage extends StatefulWidget {
@@ -39,7 +40,7 @@ class _StartPageState extends State<StartPage> {
                 context,
                 MaterialPageRoute(
                   builder: (context) {
-                    return Container();
+                    return HighscorePage();
                   },
                 ),
               );
