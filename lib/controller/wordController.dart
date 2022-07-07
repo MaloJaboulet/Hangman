@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:hangman/model/player.dart';
 import 'package:hangman/model/words.dart';
 import 'package:vibration/vibration.dart';
 
@@ -30,9 +31,10 @@ class WordController extends ChangeNotifier {
     setAllowedVibration();
   }
 
-  bool phoneShaked() {
+  bool phoneShaked(Player player) {
     if (!blankSpaces) {
       restartWord();
+      player.increaseHighScore(player.highScore + 1);
       return true;
     } else {
       return false;

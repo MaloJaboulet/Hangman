@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:hangman/controller/wordController.dart';
+import 'package:hangman/model/player.dart';
+import 'package:hangman/model/players.dart';
 import 'package:hangman/pages/listPage.dart';
+import 'package:hangman/pages/startPage.dart';
 import 'package:provider/provider.dart';
 import 'package:shake/shake.dart';
 
 class Homepage extends StatefulWidget {
   late WordController wordController;
+  late Player player;
+  late Players players;
 
-  Homepage(WordController wordController) {
+
+  Homepage(WordController wordController, Player player, Players players) {
     this.wordController = wordController;
+    this.player = player;
+    this.players = players;
     wordController.setWord();
   }
 
@@ -28,7 +36,8 @@ class _HomepageState extends State<Homepage> {
 
     ShakeDetector.autoStart(
       onPhoneShake: () {
-        if (widget.wordController.phoneShaked()) {
+        if (widget.wordController.phoneShaked(widget.player)) {
+          print(widget.player.highScore);
           forceRedraw();
         }
       },
@@ -47,7 +56,7 @@ class _HomepageState extends State<Homepage> {
               context,
               MaterialPageRoute(
                 builder: (context) {
-                  return Container();
+                  return StartPage(widget.wordController, widget.players);
                 },
               ),
             );

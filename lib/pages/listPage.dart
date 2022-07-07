@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 class ListPage extends StatefulWidget {
   WordController wordController;
+
   ListPage(this.wordController);
 
   @override
@@ -13,7 +14,6 @@ class ListPage extends StatefulWidget {
 }
 
 class _ListPageState extends State<ListPage> {
-
   final myTextController = TextEditingController();
 
   //state vars
@@ -25,13 +25,21 @@ class _ListPageState extends State<ListPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
-        title: const Center(child: Text("List")),
+        title: Center(child: Text("List")),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(null),
+          ),
+        ],
       ),
       body: Column(
-        children: [Expanded(child: listWords(widget.wordController)), listForm(widget.wordController)],
+        children: [
+          Expanded(child: listWords(widget.wordController)),
+          listForm(widget.wordController)
+        ],
       ),
     );
   }
@@ -43,7 +51,8 @@ class _ListPageState extends State<ListPage> {
         itemCount: controller.getWords.getWordList.length,
         itemBuilder: (context, index) {
           return Card(
-            child: ListTile(title: Text(controller.getWords.getWordList.elementAt(index))),
+            child: ListTile(
+                title: Text(controller.getWords.getWordList.elementAt(index))),
           );
         },
         //Text(snapshot.data!.words.first);
