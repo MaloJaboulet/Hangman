@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:hangman/controller/players.dart';
 
 class Player extends ChangeNotifier {
   String name = "";
@@ -6,19 +7,15 @@ class Player extends ChangeNotifier {
 
   Player(String name, int highScore) {
     this.name = name;
-    this.highScore;
+    this.highScore = highScore;
   }
-
-  /*Player({
-    required this.name,
-    required this.highScore,
-  });*/
 
   Player.second(this.name);
 
-  increaseHighScore(int highScore) {
-    if (this.highScore < highScore) {
-      this.highScore = highScore;
+  increaseHighScore(int highScorePlayer) {
+    if (this.highScore <= highScorePlayer) {
+      this.highScore = highScorePlayer;
+      Players.increaseHighscore(Players.getPlayer(name));
       notifyListeners();
     }
   }

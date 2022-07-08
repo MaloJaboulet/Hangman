@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
+import 'package:hangman/controller/players.dart';
 import 'package:hangman/model/player.dart';
 import 'package:hangman/model/words.dart';
 import 'package:vibration/vibration.dart';
@@ -11,6 +14,7 @@ class WordController extends ChangeNotifier {
   late List<String> _lettersGuessed = [];
   int _guessesDone = 0;
   bool _allowedVibration = false;
+  bool _timeDone = false;
 
   WordController(String word, bool wordGuessed, Words words) {
     _wordGuessed = wordGuessed;
@@ -34,7 +38,7 @@ class WordController extends ChangeNotifier {
   bool phoneShaked(Player player) {
     if (!blankSpaces) {
       restartWord();
-      player.increaseHighScore(player.highScore + 1);
+      var temp = player.highScore + 1;
       return true;
     } else {
       return false;
@@ -47,35 +51,36 @@ class WordController extends ChangeNotifier {
   }
 
   guessLetter(String letter) {
-    if (_word == "Empty") {
-      setWord();
-    } else {
-      if (_word.contains(letter)) {
-        List<int> indexList = [];
-        List<String> temp = _word.split("");
-
-        for (var i = 0; i < temp.length; i++) {
-          if (temp.elementAt(i) == letter) {
-            indexList.add(i);
-          }
-        }
-        for (var index in indexList) {
-          _lettersGuessed.removeAt(index);
-          _lettersGuessed.insert(index, letter);
-        }
+    if (!_timeDone) {
+      if (_word == "Empty") {
+        setWord();
       } else {
-        addGuessesLeft();
-        print(allowedVibration);
+        if (_word.contains(letter)) {
+          List<int> indexList = [];
+          List<String> temp = _word.split("");
 
-        Vibration.vibrate(duration: 100,amplitude: 255);
-      }
+          for (var i = 0; i < temp.length; i++) {
+            if (temp.elementAt(i) == letter) {
+              indexList.add(i);
+            }
+          }
+          for (var index in indexList) {
+            _lettersGuessed.removeAt(index);
+            _lettersGuessed.insert(index, letter);
+          }
+        } else {
+          addGuessesLeft();
 
-      print(_word);
-      print(_lettersGuessed);
-      if (!_lettersGuessed.contains("")) {
-        _blankSpaces = false;
+
+          Vibration.vibrate(duration: 100, amplitude: 255);
+        }
+
+        print(_word);
+        if (!_lettersGuessed.contains("")) {
+          _blankSpaces = false;
+        }
+        notifyListeners();
       }
-      notifyListeners();
     }
   }
 
@@ -107,6 +112,7 @@ class WordController extends ChangeNotifier {
     _blankSpaces = true;
   }
 
+
   revealWord() {
     _lettersGuessed = _word.split("");
     _blankSpaces = false;
@@ -124,6 +130,17 @@ class WordController extends ChangeNotifier {
 
   List<String> splitWord() {
     return _lettersGuessed;
+  }
+
+  resetTime(){
+    _timeDone = false;
+  }
+  timeDone(){
+    _timeDone = true;
+  }
+
+  bool get getTimeDone{
+    return _timeDone;
   }
 
   String get getWord => _words.getWord;

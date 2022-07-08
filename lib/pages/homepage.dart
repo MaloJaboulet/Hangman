@@ -12,8 +12,6 @@ class Homepage extends StatefulWidget {
   late WordController wordController;
   late Player player;
 
-
-
   Homepage(WordController wordController, Player player) {
     this.wordController = wordController;
     this.player = player;
@@ -27,7 +25,8 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   //state vars
   Timer? timer;
-  Duration _duration = Duration(minutes: 1);
+  Duration _duration = Duration(seconds: 25);
+
   forceRedraw() {
     setState(() => {});
   }
@@ -35,23 +34,14 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     super.initState();
-    startTimer;
 
-
-    /*if (timer == null || timer!.isActive){
-      stopTimer();
-    }*/
-    String strDigits(int n) => n.toString().padLeft(2, '0');
-    while(timer!.isActive) {
-      print(strDigits(_duration.inSeconds));
-    }
-
+    widget.wordController.restartWord();
+    startTimer();
 
 
     ShakeDetector.autoStart(
       onPhoneShake: () {
         if (widget.wordController.phoneShaked(widget.player)) {
-          print(widget.player.highScore);
           forceRedraw();
         }
       },
@@ -61,6 +51,24 @@ class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
     var controller = Provider.of<WordController>(context);
+
+
+    if(widget.wordController.getTimeDone) {
+      widget.wordController.resetTime();
+      stopTimer();
+      startTimer();
+    }
+
+
+
+    String strDigits(int n) => n.toString().padLeft(2, '0');
+    if (strDigits(_duration.inSeconds) == "00") {
+      widget.wordController.timeDone();
+      stopTimer();
+    }
+
+
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -110,6 +118,13 @@ class _HomepageState extends State<Homepage> {
                   children: [
                     solution(controller),
                     keyBoard(),
+                    Padding(
+                      padding:
+                      EdgeInsets.only(left:20, bottom: 0, right: 20, top:10),
+                      child: Text(widget.wordController.getTimeDone
+                          ? "The game is done. Please restart the game through the start page."
+                          : strDigits(_duration.inSeconds)),
+                    ),
                   ],
                 ),
               ),
@@ -151,7 +166,7 @@ class _HomepageState extends State<Homepage> {
         ),
       );
     }
-    print(list.length);
+
     return list;
   }
 
@@ -213,7 +228,7 @@ class _HomepageState extends State<Homepage> {
       "Ä",
       "Ö",
       "Ü",
-      "ẞ"
+      "ß"
     ];
 
     for (var i = startLetterindex; i <= lastLetterIndex; i++) {
@@ -242,8 +257,7 @@ class _HomepageState extends State<Homepage> {
   }
 
   void startTimer() {
-   timer =
-    Timer.periodic(Duration(seconds: 1), (_) => setCountDown());
+    timer = Timer.periodic(Duration(seconds: 1), (_) => setCountDown());
   }
 
   void stopTimer() {

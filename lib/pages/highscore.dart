@@ -43,9 +43,15 @@ class _HighscorePageState extends State<HighscorePage> {
       child: ListView.builder(
         itemCount: Players.getPlayerList().length,
         itemBuilder: (context, index) {
+          print(Players.getPlayerList().last.name.toString());
           return Card(
-            child: ListTile(
-                title: Text(Players.getPlayerList().elementAt(index).name)),
+              child: ListTile(
+              title: Row(children: [Text(Players.getPlayerList()
+              .elementAt(index)
+              .name), Text(Players.getPlayerList().elementAt(index).highScore.toString())],
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          ),
+              ),
           );
         },
         //Text(snapshot.data!.words.first);

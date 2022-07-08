@@ -11,7 +11,6 @@ class Players {
 
   static addPlayer(String name, int highscore) async {
     if (_preferences != null) {
-      print("++++++++++++++++++++++++++++++++++++++++++");
       Player player = Player(name, highscore);
       List<Player> tempList = getPlayerList();
       if (!Players.containsPlayer(name)) {
@@ -34,6 +33,22 @@ class Players {
     return false;
   }
 
+  static increaseHighscore(Player player){
+    if (_preferences != null) {
+      var playersList = getPlayerList();
+      for (var player1 in playersList) {
+        if (player1.name == player.name) {
+          var index = playersList.indexOf(player1);
+          playersList.removeAt(index);
+          playersList.add(player);
+        }
+      }
+      _preferences!.remove("players");
+      _preferences!.setString(
+          "players", jsonEncode(playersList.map((e) => e.toJson()).toList()));
+    }
+  }
+
   static Player getPlayer(String name) {
     if (_preferences != null) {
       var playersList = getPlayerList();
@@ -49,10 +64,11 @@ class Players {
   static List<Player> getPlayerList() {
     if (_preferences != null) {
       if (_preferences!.get("players") != null) {
-        Iterable l = json.decode(_preferences!.get("players")
+        var tempList = json.decode(_preferences!.get("players")
             .toString());
+
         List<Player> list =
-          List<Player>.from(l.map((model) => Player.fromJson(model)));
+          List<Player>.from(tempList.map((model) => Player.fromJson(model)));
         list.sort(sortComparison);
         return list;
       }
@@ -63,9 +79,9 @@ class Players {
   static int sortComparison(Player p1, Player p2) {
     final highScorePlayer1 = p1.highScore;
     final highScorePlayer2 = p2.highScore;
-    if (highScorePlayer1 < highScorePlayer2) {
+    if (highScorePlayer1 > highScorePlayer2) {
       return -1;
-    } else if (highScorePlayer1 > highScorePlayer2) {
+    } else if (highScorePlayer1 < highScorePlayer2) {
       return 1;
     } else {
       return 0;
