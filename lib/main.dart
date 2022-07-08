@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hangman/controller/wordController.dart';
 import 'package:hangman/model/fetchWords.dart';
 import 'package:hangman/model/player.dart';
@@ -14,9 +15,12 @@ void main() async {
   WordController wordController = WordController.name(words);
 
   WidgetsFlutterBinding.ensureInitialized();
-
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await Players.init();
-  runApp(MyApp(wordController));
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runApp(MyApp(wordController));
+  });
 }
 
 class MyApp extends StatelessWidget {
