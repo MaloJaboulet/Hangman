@@ -15,8 +15,6 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
 
-  List<Player> playersList = [];
-  //Players players = Players();
   await Players.init();
   runApp(MyApp(wordController));
 }

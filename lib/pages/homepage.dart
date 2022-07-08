@@ -13,6 +13,7 @@ class Homepage extends StatefulWidget {
   late Player player;
 
   Homepage(WordController wordController, Player player) {
+    print(player.name);
     this.wordController = wordController;
     this.player = player;
     wordController.setWord();
@@ -41,7 +42,7 @@ class _HomepageState extends State<Homepage> {
 
     ShakeDetector.autoStart(
       onPhoneShake: () {
-        if (widget.wordController.phoneShaked(widget.player)) {
+        if (widget.wordController.phoneShaked()) {
           forceRedraw();
         }
       },

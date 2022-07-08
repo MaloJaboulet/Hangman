@@ -15,8 +15,9 @@ class WordController extends ChangeNotifier {
   int _guessesDone = 0;
   bool _allowedVibration = false;
   bool _timeDone = false;
+  late Player _player;
 
-  WordController(String word, bool wordGuessed, Words words) {
+  WordController(String word, bool wordGuessed, Words words, Player player) {
     _wordGuessed = wordGuessed;
     _words = words;
     _word = _words.getWord.toUpperCase();
@@ -24,6 +25,7 @@ class WordController extends ChangeNotifier {
       _lettersGuessed.add("");
     }
     setAllowedVibration();
+    this._player = player;
   }
 
   WordController.name(Words words) {
@@ -35,10 +37,11 @@ class WordController extends ChangeNotifier {
     setAllowedVibration();
   }
 
-  bool phoneShaked(Player player) {
+  bool phoneShaked() {
     if (!blankSpaces) {
       restartWord();
-      var temp = player.highScore + 1;
+      _player.highScore = _player.highScore + 1;
+      Players.increaseHighscore(_player);
       return true;
     } else {
       return false;
@@ -199,5 +202,11 @@ class WordController extends ChangeNotifier {
 
   setAllowedVibration() async {
     //_allowedVibration = await Vibrate.canVibrate;
+  }
+
+  Player get player => _player;
+
+  void setPlayer(Player player) {
+    _player = player;
   }
 }

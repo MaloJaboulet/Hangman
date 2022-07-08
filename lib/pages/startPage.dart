@@ -21,8 +21,10 @@ class StartPage extends StatefulWidget {
 class _StartPageState extends State<StartPage> {
   final myTextController = TextEditingController();
 
+
   @override
   Widget build(BuildContext context) {
+    var wordController = widget._wordController;
     return Scaffold(
       appBar: AppBar(
         title: Center(
@@ -49,6 +51,7 @@ class _StartPageState extends State<StartPage> {
         ],
       ),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           TextField(
             controller: myTextController,
@@ -56,7 +59,7 @@ class _StartPageState extends State<StartPage> {
               labelText: 'Enter your Name',
               border: OutlineInputBorder(),
               errorBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.red, width: 5)),
+                  borderSide: BorderSide(width: 5)),
             ),
           ),
           ElevatedButton(
@@ -65,6 +68,7 @@ class _StartPageState extends State<StartPage> {
                   String playerName = myTextController.text;
                   Players.addPlayer(playerName, 0);
                   myTextController.clear();
+                  wordController.setPlayer(Players.getPlayer(playerName));
                   Navigator.push(
                     context,
                     MaterialPageRoute(
